@@ -10,4 +10,4 @@ ln -snf /usr/share/zoneinfo/"$TZ" /etc/localtime && echo "$TZ" > /etc/timezone
 
 chown weechat:weechat ~weechat
 
-su - weechat -c "tmux -2 new-session -d -s weechat weechat"
+su - weechat -c "tmux -2 new-session -s weechat weechat"
