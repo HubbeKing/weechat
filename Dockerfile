@@ -1,6 +1,15 @@
 FROM alpine
 
-RUN apk add --update bash shadow weechat
+RUN apk add --update \
+    bash \
+    python \
+    shadow \
+    weechat \
+    weechat-aspell \
+    weechat-ruby \
+    weechat-lua \
+    weechat-perl \
+    weechat-python
 
 ENV LANG en_US.UTF-8
 ENV LC_ALL en_US.UTF-8
