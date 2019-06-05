@@ -8,6 +8,6 @@ groupmod -o -g "$PGID" weechat
 usermod -o -u "$PUID" weechat
 ln -snf /usr/share/zoneinfo/"$TZ" /etc/localtime && echo "$TZ" > /etc/timezone
 
-chown -R weechat:weechat ~weechat
+chown weechat:weechat ~weechat
 
-su - weechat -c weechat
+su - weechat -c "tmux -2 new-session -d -s weechat weechat"
