@@ -4,6 +4,7 @@ RUN apk add --update \
     bash \
     python \
     shadow \
+    tzdata \
     weechat \
     weechat-aspell \
     weechat-ruby \
