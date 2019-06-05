@@ -9,8 +9,4 @@ services:
     ports:
       - 9001:9001
     volumes:
-      - ./weechat:/home/weechat/.weechat
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=Europe/Helsinki
+      - ./weechat:/weechat/
