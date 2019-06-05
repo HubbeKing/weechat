@@ -10,4 +10,4 @@ ln -snf /usr/share/zoneinfo/"$TZ" /etc/localtime && echo "$TZ" > /etc/timezone
 
 chown -R weechat:weechat ~weechat
 
-weechat
+su - weechat -c weechat

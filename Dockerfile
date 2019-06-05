@@ -9,5 +9,6 @@ ENV LC_ALL en_US.UTF-8
 ENV TERM xterm-256color
 
 ADD init.sh /init.sh
+RUN chmod +x /init.sh
 
 ENTRYPOINT [ "/init.sh" ]
