@@ -9,4 +9,5 @@ services:
     ports:
       - 9001:9001
     volumes:
-      - ./weechat:/weechat/
+      - ./weechat/:/home/weechat/.weechat/
+      - ./tmux.conf:/home/weechat/.tmux.conf
