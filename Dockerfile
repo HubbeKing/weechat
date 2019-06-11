@@ -29,8 +29,6 @@ RUN usermod -o -u "${PUID}" weechat
 RUN ln -snf /usr/share/zoneinfo/"${TZ}" /etc/localtime && echo "${TZ}" > /etc/timezone
 RUN chown -R weechat:weechat ${HOME}
 
-VOLUME ${HOME}
-
 USER weechat
 # TODO find a better way to keep docker from killing the container just because tmux is detached, because holy crap is this hacky
 CMD ["bash", "-c", "tmux new -d -s weechat weechat && tail -f /dev/null"]
