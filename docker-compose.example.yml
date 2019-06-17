@@ -4,8 +4,6 @@ services:
     image: hubbeking/weechat
     container_name: weechat
     restart: unless-stopped
-    stdin_open: true
-    tty: true
     ports:
       - 9001:9001
     volumes:
