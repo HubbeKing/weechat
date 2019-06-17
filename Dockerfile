@@ -24,7 +24,13 @@ RUN groupadd -g ${PGID} weechat
 RUN useradd -g ${PGID} -u ${PUID} -m -s /bin/bash weechat
 
 RUN ln -snf /usr/share/zoneinfo/"${TZ}" /etc/localtime && echo "${TZ}" > /etc/timezone
+ADD start.sh /home/weechat/start.sh
+ADD tmux.conf /home/weechat/.tmux.conf
+RUN chown -R weechat:weechat /home/weechat
+RUN chmod +x /home/weechat/start.sh
+
+HEALTHCHECK CMD tmux has-session -t weechat
 
 USER weechat
-# TODO find a better way to keep docker from killing the container just because tmux is detached, because holy crap is this hacky
-CMD ["bash", "-c", "tmux new -d -s weechat weechat && tail -f /dev/null"]
+WORKDIR /home/weechat
+CMD ./start.sh
