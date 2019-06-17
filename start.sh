@@ -1,10 +1,10 @@
 #!/bin/bash
 
-# TODO use actual signal to exit rather than TERM?
-# trap SIGTERM signal and cleanly exit weechat before exiting script
+# trap SIGTERM signal, tell weechat to quit, and then wait for tmux to die
+# tmux should die when weechat has quit, and then the waits exit in sequence... I think.
 _term() {
-  echo "*/quit" > /home/weechat/.weechat/weechat_fifo
-  exit 0
+  echo "*/quit" > /home/weechat/.weechat/weechat_fifo &
+  wait
 }
 
 trap _term SIGTERM
