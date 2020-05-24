@@ -11,13 +11,13 @@ RUN echo "deb https://weechat.org/ubuntu focal main" | tee /etc/apt/sources.list
 RUN echo "deb-src https://weechat.org/ubuntu focal main" | tee -a /etc/apt/sources.list.d/weechat.list
 
 # set locale variables
-ENV LANG en_US.UTF-8
-ENV LC_ALL en_US.UTF-8
+ENV LANG en_GB.UTF-8
+ENV LC_ALL en_GB.UTF-8
 ENV TERM screen-256color
 ENV TZ Europe/Helsinki
 
-# install locales package and generate locales
-RUN apt-get update && apt-get install -y locales && locale-gen ${LANG} ${LC_ALL}
+# install tzdata and locales packages, then generate locales
+RUN apt-get update && apt-get install -y locales tzdata && locale-gen ${LANG} ${LC_ALL}
 
 # install weechat and tmux
 RUN apt-get update && apt-get install -y \
@@ -37,6 +37,7 @@ RUN useradd -g ${PGID} -u ${PUID} -m -s /bin/bash weechat
 
 # set timezone
 RUN ln -snf /usr/share/zoneinfo/"${TZ}" /etc/localtime && echo "${TZ}" > /etc/timezone
+RUN dpkg-reconfigure -f noninteractive tzdata
 
 # add scripts and ensure correct permissions
 ADD start.sh /home/weechat/start.sh
