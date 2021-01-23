@@ -20,8 +20,9 @@ steps:
     privileged: true
     commands:
       - buildah login -u $REGISTRY_USERNAME -p $REGISTRY_PASSWORD registry.hubbe.club
-      - buildah bud --tag registry.hubbe.club/weechat:$DRONE_TAG .
+      - buildah bud --tag registry.hubbe.club/weechat:$DRONE_TAG --tag registry.hubbe.club/weechat:latest .
       - buildah push registry.hubbe.club/weechat:$DRONE_TAG
+      - buildah push registry.hubbe.club/weechat:latest
     resources:
       requests:
         cpu: 100
