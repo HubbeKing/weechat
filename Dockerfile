@@ -1,5 +1,8 @@
 FROM ubuntu:20.04
 
+# set weechat version
+ARG WEE_VERSION=3.0
+
 # add weechat gpg prereqs
 RUN apt-get update && apt-get install -y dirmngr gnupg apt-transport-https ca-certificates
 
@@ -22,10 +25,10 @@ RUN apt-get update && apt-get install -y locales tzdata && locale-gen ${LANG} ${
 # install weechat and tmux
 RUN apt-get update && apt-get install -y \
     tmux \
-    weechat-curses \
-    weechat-plugins \
-    weechat-python \
-    weechat-perl
+    weechat-curses=$WEE_VERSION-1 \
+    weechat-plugins=$WEE_VERSION-1 \
+    weechat-python=$WEE_VERSION-1 \
+    weechat-perl=$WEE_VERSION-1
 
 # set user variables
 ENV PUID 1000
