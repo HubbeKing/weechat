@@ -16,15 +16,14 @@ RUN echo "deb-src https://weechat.org/ubuntu focal main" | tee -a /etc/apt/sourc
 # set locale variables
 ENV LANG en_GB.UTF-8
 ENV LC_ALL en_GB.UTF-8
-ENV TERM screen-256color
 ENV TZ Europe/Helsinki
 
 # install tzdata and locales packages, then generate locales
 RUN apt-get update && apt-get install -y locales tzdata && locale-gen ${LANG} ${LC_ALL}
 
-# install weechat and tmux
+# install weechat and screen
 RUN apt-get update && apt-get install -y \
-    tmux \
+    screen \
     weechat-curses=$WEE_VERSION-1 \
     weechat-plugins=$WEE_VERSION-1 \
     weechat-python=$WEE_VERSION-1 \
@@ -44,7 +43,6 @@ RUN dpkg-reconfigure -f noninteractive tzdata
 
 # add scripts and ensure correct permissions
 ADD start.sh /home/weechat/start.sh
-ADD tmux.conf /home/weechat/.tmux.conf
 RUN chown -R weechat:weechat /home/weechat
 RUN chmod +x /home/weechat/start.sh
 
