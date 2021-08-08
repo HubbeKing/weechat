@@ -1,4 +1,4 @@
-FROM ubuntu:20.04
+FROM ubuntu:21.04
 
 # set weechat version
 ARG WEE_VERSION=3.2
@@ -10,8 +10,8 @@ RUN apt-get update && apt-get install -y dirmngr gnupg apt-transport-https ca-ce
 RUN apt-key adv --keyserver hkps://keys.openpgp.org --recv-keys 11E9DE8848F2B65222AA75B8D1820DB22A11534E
 
 # add weechat apt repo
-RUN echo "deb https://weechat.org/ubuntu focal main" | tee /etc/apt/sources.list.d/weechat.list
-RUN echo "deb-src https://weechat.org/ubuntu focal main" | tee -a /etc/apt/sources.list.d/weechat.list
+RUN echo "deb https://weechat.org/ubuntu hirsute main" | tee /etc/apt/sources.list.d/weechat.list
+RUN echo "deb-src https://weechat.org/ubuntu hirsute main" | tee -a /etc/apt/sources.list.d/weechat.list
 
 # set locale variables
 ENV LANG en_GB.UTF-8
@@ -21,9 +21,13 @@ ENV TZ Europe/Helsinki
 # install tzdata and locales packages, then generate locales
 RUN apt-get update && apt-get install -y locales tzdata && locale-gen ${LANG} ${LC_ALL}
 
-# install weechat and screen
+# install weechat, tmux, and screen, along with whatever terminfo packages we can find
 RUN apt-get update && apt-get install -y \
+    foot-terminfo \
+    kitty-terminfo \
     screen \
+    terminfo \
+    tmux \
     weechat-curses=$WEE_VERSION-1 \
     weechat-plugins=$WEE_VERSION-1 \
     weechat-python=$WEE_VERSION-1 \
