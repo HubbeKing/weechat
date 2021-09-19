@@ -1,7 +1,7 @@
 FROM ubuntu:21.04
 
 # set weechat version
-ARG WEE_VERSION=3.2
+ARG WEE_VERSION=3.3
 
 # add weechat gpg prereqs
 RUN apt-get update && apt-get install -y dirmngr gnupg apt-transport-https ca-certificates
