@@ -1,28 +1,35 @@
-FROM ubuntu:21.10
+FROM docker.io/library/debian:11
 
 # set weechat version
-ARG WEE_VERSION=3.4
-
-# add weechat gpg prereqs
-RUN apt-get update && apt-get install -y dirmngr gnupg apt-transport-https ca-certificates
-
-# add weechat signing key
-RUN apt-key adv --keyserver hkps://keys.openpgp.org --recv-keys 11E9DE8848F2B65222AA75B8D1820DB22A11534E
-
-# add weechat apt repo
-RUN echo "deb https://weechat.org/ubuntu hirsute main" | tee /etc/apt/sources.list.d/weechat.list
-RUN echo "deb-src https://weechat.org/ubuntu hirsute main" | tee -a /etc/apt/sources.list.d/weechat.list
-
+ARG WEE_VERSION=3.5
 # set locale variables
 ENV LANG en_GB.UTF-8
 ENV LC_ALL en_GB.UTF-8
 ENV TZ Europe/Helsinki
+# set user variables
+ENV PUID 1000
+ENV PGID 1000
+
+# add weechat gpg prereqs
+RUN apt update && apt install -y dirmngr gnupg apt-transport-https ca-certificates
+
+# create gnupg directory
+RUN mkdir -p ~/.gnupg
+RUN chmod 700 ~/.gnupg
+
+# import GPG key used to sign weechat repo
+RUN mkdir -p /usr/share/keyrings
+RUN gpg --no-default-keyring --keyring /usr/share/keyrings/weechat-archive-keyring.gpg --keyserver hkps://keys.openpgp.org --recv-keys 11E9DE8848F2B65222AA75B8D1820DB22A11534E
+
+# add weechat apt repo
+RUN echo "deb [signed-by=/usr/share/keyrings/weechat-archive-keyring.gpg] https://weechat.org/debian bullseye main" | tee /etc/apt/sources.list.d/weechat.list
+RUN echo "deb-src [signed-by=/usr/share/keyrings/weechat-archive-keyring.gpg] https://weechat.org/debian bullseye main" | tee -a /etc/apt/sources.list.d/weechat.list
 
 # install tzdata and locales packages, then generate locales
-RUN apt-get update && apt-get install -y locales tzdata && locale-gen ${LANG} ${LC_ALL}
+RUN apt update && apt install -y locales tzdata && locale-gen ${LANG} ${LC_ALL}
 
 # install weechat, tmux, and screen, along with whatever terminfo packages we can find
-RUN apt-get update && apt-get install -y \
+RUN apt update && apt install -y \
     foot-terminfo \
     kitty-terminfo \
     screen \
@@ -32,10 +39,6 @@ RUN apt-get update && apt-get install -y \
     weechat-plugins=$WEE_VERSION-1 \
     weechat-python=$WEE_VERSION-1 \
     weechat-perl=$WEE_VERSION-1
-
-# set user variables
-ENV PUID 1000
-ENV PGID 1000
 
 # create user and group
 RUN groupadd -g ${PGID} weechat
