@@ -4,7 +4,8 @@ FROM docker.io/library/debian:11
 ARG WEE_VERSION=3.5
 # set locale variables
 ENV LANG en_GB.UTF-8
-ENV LC_ALL en_GB.UTF-8
+ENV LANGUAGE $LANG
+ENV LC_ALL $LANG
 ENV TZ Europe/Helsinki
 # set user variables
 ENV PUID 1000
@@ -25,8 +26,14 @@ RUN gpg --no-default-keyring --keyring /usr/share/keyrings/weechat-archive-keyri
 RUN echo "deb [signed-by=/usr/share/keyrings/weechat-archive-keyring.gpg] https://weechat.org/debian bullseye main" | tee /etc/apt/sources.list.d/weechat.list
 RUN echo "deb-src [signed-by=/usr/share/keyrings/weechat-archive-keyring.gpg] https://weechat.org/debian bullseye main" | tee -a /etc/apt/sources.list.d/weechat.list
 
-# install tzdata and locales packages, then generate locales
-RUN apt update && apt install -y locales tzdata && locale-gen ${LANG} ${LC_ALL}
+# install tzdata and locales packages
+RUN apt update && apt install -y locales tzdata
+
+# generate locale data
+RUN sed -i -e "s/# $LANG UTF-8/$LANG UTF-8/" /etc/locale.gen
+RUN echo "LANG='$LANG'" > /etc/default/locale
+RUN dpkg-reconfigure --frontend=noninteractive locales
+RUN update-locale LANG=$LANG
 
 # install weechat, tmux, and screen, along with whatever terminfo packages we can find
 RUN apt update && apt install -y \
