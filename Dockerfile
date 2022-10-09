@@ -1,7 +1,7 @@
 FROM docker.io/library/debian:11
 
 # set weechat version
-ARG WEE_VERSION=3.6
+ARG WEE_VERSION=3.7
 # set locale variables
 ENV LANG en_GB.UTF-8
 ENV LANGUAGE $LANG
